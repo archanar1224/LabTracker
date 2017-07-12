@@ -1,0 +1,1 @@
+var app=angular.module('nimhanslab',['receivingStation','tree','stainingStation','specialRequest','sectioningStation','reportingStation','query','grossingStation','embeddingStation','GlobalURL']);

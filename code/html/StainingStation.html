@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta type="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.min.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.6.0.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.1/angular-cookies.js"></script>
+    <title>Staining Station, NeuroPathology Lab, NIMHANS</title>
+    <style>.jumbotron {
+        padding: 0.3em 0.6em;
+    h1 {
+        font-size: 2em;
+    }
+    p {
+        font-size: 1.2em;
+    .btn {
+        padding: 0.5em;
+    }
+    }
+    }</style>
+    <script type="text/javascript">
+    $(function() {
+    	  $("#barcodeText").focus();
+    	  $('#barcodeText').keypress(function(e){
+    	      if(e.keyCode==13)
+    	      $('#sendBarcode').click();
+    	    });
+    	  $("#addQueue").click(function(){
+              $("input").focus();
+          });
+    	  $("#clear").click(function(){
+              $("input").focus();
+          });
+	
+    	});
+   /* function LaunchApp() {
+
+    	var ws = new ActiveXObject("WScript.Shell");
+    	ws.Exec("C:\\Windows\\notepad.exe");
+    	}*/
+    </script>
+</head>
+<body ng-app="stainingStation" ng-controller="StainController">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            <p class="navbar-brand"> Staining Station, NeuroPathology Lab, NIMHANS</p>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+      		<li><div align="right" style="padding-right:5px;">
+                <p> Logged in as {{username}}</p>
+                <button type="button" class="btn btn-default btn-small" data-toggle="modal" data-target="#loginModal" >Change User</button>
+            	</div></li>
+    		</ul>
+            
+        </div>
+    </nav>
+    <!-- *************************************************************************************************************************************
+    loginModel Code
+    
+    
+    <!-- ************* Login Modal **********-->
+
+    <div class="modal fade" id="loginModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">User Login</h4>
+        </div>
+        <div class="modal-body">
+           
+               
+                        <label for="uname"><b>Users :</b></label>
+                        <select ng-model="username" class="form-control" id="uname" >
+                            <option ng-repeat="tech in techTable"><b>{{tech.technicianName}}</b></option>
+        
+                      </select>
+             <br>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                        <input type="submit" class="btn btn-success pull-right" ng-click="setUsername()" value="Save" data-dismiss="modal"/>
+                    </div>
+          
+                <div class="clearfix"></div>
+                <div class="modal-footer"></div>
+           
+        </div>
+        </div>
+        </div>
+    </div>
+    
+
+    
+    <!-- THE BELOW DIV IS SCAN BARCODE SCREEN DETAILS-->
+    <div ng-hide="task">
+        <br>
+        <div align="center" value="Read Barcode :">
+			<input type="text" ng-model="slideIdValue"  ng-blur="slideIdValue=slideIdValue.toUpperCase();" id="barcodeText" placeholder="Scan/Enter SlideID">
+            <button type="button" id="sendBarcode" class="btn btn-default" ng-click="completeSlide()" title="Complete"><i class="glyphicon glyphicon-barcode"></i> Submit</button>
+
+      </div>
+        <div class="clearfix"></div>
+        </div>
+        </div>
+    </div>
+    
+        
+   <!--  <div align="center">
+        <form class="form-inline" role="form2">
+            <div class="form-group"><br>
+                <label>Number of Blocks to be generated:</label>
+                <input type="number" class="form-control" id="numberBlocks" ng-model="number" min=1 class="input-mini"placeholder="Enter Number">
+                <button type="button" class="btn btn-info" ng-click="generateBlocks()">Gross</button>
+            </div >
+        </form>
+    </div>  -->
+
+    <!--THIS DIV IS TO DISPLAY TISSUE OBJECT , PUT TISSUE ATTRIBUTES LIKE IN JSON .
+    CHANGE THE BELOW , FOR REFERENCE , RecievingStation.html jumbotron
+    IF json is {"employee_name":"name","employee_id":"id"} , in HTML display {{employee.employee_id}}
+    to get value after assigning to var employee={} in the js page
+    LIKEWISE HERE , AFTER ASSIGNING THE DATA OBJECT IN SUCCESS TO $scope.tissue , access tissue attributes defined in json-->
+
+   
+                      
+       
+
+    
+    </div>
+        <!--AFTER SELECTING THE NUMBER OF BLOCKS HERE YOU MUST MAKE A REST GET CALL TO SEND NUMBER OF TISSUES
+AND RECEIVE A NUMBER OF SUGGESTED BLOCK NP NUMBERS . ON PRESSING PRINT , REST CALL TO MAKE NEW BLOCKS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-animate.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.9.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/staining.js"></script>
+    <script src="js/alasql.min.js"></script>
+    <script src="js/xlsx.core.min.js"></script>
+</body>
+</html>

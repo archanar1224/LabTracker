@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta type="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.min.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.6.0.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.1/angular-cookies.js"></script>
+    <title>Sectioning Station, NeuroPathology Lab, NIMHANS</title>
+    <style>.jumbotron {
+        padding: 0.3em 0.6em;
+    h1 {
+        font-size: 2em;
+    }
+    p {
+        font-size: 1.2em;
+    .btn {
+        padding: 0.5em;
+    }
+    }
+    }</style>
+    <script type="text/javascript">
+    $(function() {
+    	  $("#barcodeText").focus();
+    	  $('#barcodeText').keypress(function(e){
+    	      if(e.keyCode==13)
+    	      $('#sendBarcode').click();
+    	    });
+    	  $("#addQueue").click(function(){
+              $("input").focus();
+          });
+    	  $("#clear").click(function(){
+              $("input").focus();
+          });
+	
+    	});
+   /* function LaunchApp() {
+
+    	var ws = new ActiveXObject("WScript.Shell");
+    	ws.Exec("C:\\Windows\\notepad.exe");
+    	}*/
+    </script>
+</head>
+<body ng-app="sectioningStation" ng-controller="SectionController">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+            <p class="navbar-brand"> Sectioning Station, NeuroPathology Lab, NIMHANS</p>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+      		<li style="padding:10px 5px;" ><button type="button" ng-disabled="pendingTissue" class="btn btn-large btn-danger"  ng-click="getPendingTasks()" title="Pending Tasks">Pending Tasks</button></li>
+     		<li class="active" style="padding:10px 5px;"><button ng-disabled="scanTissue" type="button" class="btn btn-large btn-info" ng-click="scanScreen()">Scan Tissue</button></li>
+      		<li style="padding:10px 5px;"><button type="button" ng-disabled="completedTissue" class="btn btn-large btn-success" ng-click="getCompletedTasks()" title="Completed Tasks">Completed Tasks</button></li>
+      		<li><div align="right" style="padding-right:5px;">
+                <p> Logged in as {{username}}</p>
+                <button type="button" class="btn btn-default btn-small" data-toggle="modal" data-target="#loginModal" >Change User</button>
+            	</div></li>
+    		</ul>
+            
+        </div>
+    </nav>
+    <!-- *************************************************************************************************************************************
+    loginModel Code
+    
+    
+    <!-- ************* Login Modal **********-->
+
+    <div class="modal fade" id="loginModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">User Login</h4>
+        </div>
+        <div class="modal-body">
+           
+               
+                        <label for="uname"><b>Users :</b></label>
+                        <select ng-model="username" class="form-control" id="uname" >
+                            <option ng-repeat="tech in techTable"><b>{{tech.technicianName}}</b></option>
+        
+                      </select>
+             <br>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                        <input type="submit" class="btn btn-success pull-right" ng-click="setUsername()" value="Save" data-dismiss="modal"/>
+                    </div>
+          
+                <div class="clearfix"></div>
+                <div class="modal-footer"></div>
+           
+        </div>
+        </div>
+        </div>
+    </div>
+    
+    <!--****************************************************EDIT MODAL****************************************************************************8-->
+
+
+    <div class="modal fade" id="editModal" role="dialog">
+    
+    <div class="modal-dialog">
+     <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Edit Asset</h4>
+        </div>
+        <div class="modal-body" style="padding :32px;">
+          
+                <form name="assetForm" class="form-horizontal" novalidate >
+                    <h3>NP Number :: {{asset.npNumber.id.value}}</h3>
+                    <h3>Type :: {{edit.assetType}}</h3>
+                    <div class="form-group" >
+                        <label for="3"><b>Biopsy :</b></label>
+                        <select ng-model="edit.biopsy" class="form-control" id="3" >
+                            <option><b>Tumor</b></option>
+                            <option><b>Muscle</b></option>
+                            <option><b>Epilepsy</b></option>
+                            <option><b>Brain Biopsy</b></option>
+                            <option><strong>Lip</strong></option>
+                            <option><b>Liver</b></option>
+                            <option><b>Lymph Node</b></option>
+                            <option><b>Hair</b></option>
+                            <option><b>Thymus</b></option>
+                            <option><b>Nerve</b></option>
+                            <option><b>Skin</b></option>
+                            <option><b>Other</b></option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="2"><b>Fixative: </b></label>
+                        <select ng-model="edit.fixative" class="form-control" id="2" >
+                            <option>10% Formalin</option>
+                            <option>2.5% Cidex</option>
+                            <option>2% Glutaraldehyde</option>
+                            <option>Saline</option>
+                            <option>Fresh</option>
+                            <option>Alcohol</option>
+                            <option>Other</option>
+                            <option>None</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                        <input type="submit" class="btn btn-success pull-right" data-dismiss="modal" ng-click="update(asset)" onclick="$('#3').val(null),$('#1').val(null),$('#2').val(null)" value="Save" />
+                    </div>
+                </form>
+                <div class="clearfix"></div>
+                <div class="modal-footer"></div>
+          
+        </div>
+        <div class="clearfix"></div>
+        </div>
+        </div>
+    </div>
+    
+        <div ng-show="task">
+        <br>
+            <form class="form-horizontal" >
+            <div class="clearfix" style="padding-bottom: 5px"></div>
+            <div class="form-group" >
+                <div class="col-sm-12" >
+                    <div class="panel panel-primary" id="asset-list1"><!-- asset List Start-->
+                        <div class="panel-heading">{{label}}</div>
+                        <div class="panel-body" style="padding:0px">
+                            <table class="table table-striped table-bordered" style="margin:0">
+                                <thead>
+                                <tr>
+                                    <th>NP Number </th>
+                                    <th>Remarks </th>
+                                    <th>Specimen</th>
+                                    <th>Biopsy Type</th>
+                                    <th>Fixative</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="asset in assetTasksTable" >
+                                    <td>{{asset.assetId.id.value}}</td>
+                                    <td>{{asset.remarks}}</td>
+                                    <td>{{asset.assetType}}</td>
+                                    <td>{{asset.biopsy}}</td>
+                                    <td>{{asset.fixative}}</td>
+                                    <td width="150">
+                                        <!-- <button type="button" ng-click="printAsset(asset.npNumber)" class="btn btn-sm btn-primary" title="Print" >
+                                            <i class="glyphicon glyphicon-print"></i>
+                                        </button>  -->
+                                        <button type="button" class="btn btn-sm btn-danger" title="Delete"  ng-click="delete(asset)">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                            <!--ng-click=";hideRow = true""-->
+                                        </button>
+                                        <button class="btn btn-sm btn-warning " title="Edit" ng-click="edit(asset)" data-toggle="modal" data-target="#editModal">
+                                            <i class="glyphicon glyphicon-pencil"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div><!-- asset List End -->
+                </div>
+            </div>
+        </form>
+    </div>
+    
+     
+    
+    <!-- THE BELOW DIV IS SCAN BARCODE SCREEN DETAILS-->
+    <div ng-hide="task">
+        <br>
+        <div align="center" value="Read Barcode :">
+            <input type="text" ng-model="npNumberValue" ng-disabled="!step1" ng-blur="npNumberValue=npNumberValue.toUpperCase();" id="barcodeText" placeholder="Scan/Enter NP Number">
+            <!--*************************************************************ATTENTION*******************************************************************************
+             SO , the person scans the barcode after putting the cursor on the input above and clicks button to populate patient data******
+            ***************************************************************************************************************-->
+            </input>
+            <button type="button" id="sendBarcode" class="btn btn-default"ng-click="getAssetDetails()" title="Get Patient Details by Scanning Barcode"><i class="glyphicon glyphicon-barcode"></i> Submit</button>
+
+        </div>
+        <div class="container" style="padding-top:10px;">
+        <div class="jumbotron" >
+            <div class="container">
+                <h3 align="center"><b>Asset Details :</b></h3>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5 align="center">
+                            Patient UHID :: <b>{{patient.UHID}}</b>
+                        </h5>
+                        <h5 align="center">
+                            Patient Name :: <b>{{patient.patientName}}</b>
+                        </h5>
+                        <h5 align="center">
+                            Age :: <b>{{patient.age}}</b>
+                        </h5><!--
+                        <h5 align="center">
+                            Sex :: <b>{{sex}}</b>
+                        </h5>-->
+                        
+
+                    </div>
+                    <div class="col-sm-6">
+                        <h5 align="center">
+                            Asset NP Number :: <b>{{asset.assetId.id.value}}</b>
+                        </h5>
+                        <h5 align="center">
+                            Referring Doctor :: <b>{{patient.doctor}}</b>
+                        </h5>
+                        <h5 align="center">
+                            Remarks :: <b>{{asset.remarks}}</b>
+                        </h5>
+                       <!--  <h5 align="center"> 
+                            Type :: <b>{{asset.assetType}}</b>
+                        </h5>
+                        <h5 align="center">
+                            Biopsy :: <b>{{asset.biopsy}}</b>
+                        </h5>
+                        <h5 align="center">
+                            Fixative :: <b>{{asset.fixative}}</b>
+                        </h5></div> -->
+                        
+                </div>
+            </div>
+
+
+         <!--   <form align= "center" class="form-inline" role="form1">
+                <div class="form-group"><br>
+                    <button type="button" class="btn btn-info" ng-click="startTransaction()" ng-disabled="asset.nextState!=2">Proceed...</button>
+                    <button type="button" class="btn btn-info" onClick="window.location.reload();">Done</button>
+                </div >
+            </form> --> 
+        </div>
+    </div>
+   <!--  <div align="center">
+        <form class="form-inline" role="form2">
+            <div class="form-group"><br>
+                <label>Number of Blocks to be generated:</label>
+                <input type="number" class="form-control" id="numberBlocks" ng-model="number" min=1 class="input-mini"placeholder="Enter Number">
+                <button type="button" class="btn btn-info" ng-click="generateBlocks()">Gross</button>
+            </div >
+        </form>
+    </div>  -->
+
+    <!--THIS DIV IS TO DISPLAY TISSUE OBJECT , PUT TISSUE ATTRIBUTES LIKE IN JSON .
+    CHANGE THE BELOW , FOR REFERENCE , RecievingStation.html jumbotron
+    IF json is {"employee_name":"name","employee_id":"id"} , in HTML display {{employee.employee_id}}
+    to get value after assigning to var employee={} in the js page
+    LIKEWISE HERE , AFTER ASSIGNING THE DATA OBJECT IN SUCCESS TO $scope.tissue , access tissue attributes defined in json-->
+
+   
+    <div class="form-group">
+        <div class="col-sm-12" >
+            <div class="panel panel-primary" id="asset-list"><!-- asset List Start-->
+                <div class="panel-heading">Assets</div>
+                <div class="panel-body" style="padding:0px">
+                    <table class="table table-striped table-bordered" style="margin:0">
+                        <thead>
+                        <tr>
+                            <th>NP Number</th>
+                           <!--  <th width="200">
+                             <button type="button" class="btn btn-info" ng-click="generateBlocks()" ng-disabled="step1" title="Click here to Add Slides">Add Slide</button>
+                            <button type="button" id="clear" ng-click="clearAll()" class="btn btn-info" title="Clear the page without clearing Queue" >
+            				Clear <i class="glyphicon glyphicon-refresh"></i>
+      						</button>-->
+      						<th>Slide Type</th>
+      						<th>Quantity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><b>{{asset.assetId.id.value}}</b></td>
+                            <!-- <td width="200">
+                                <button type="button" ng-click="printAsset(asset.npNumber)" class="btn btn-sm btn-primary" title="Add this to Queue" >
+                                   Add To <i class="glyphicon glyphicon-print"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" title="Delete" ng-click="delete(asset)">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </button> <!--
+                                <button class="btn btn-sm btn-warning" title="Edit" >
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </button>
+                            </td> -->
+                            <td><select ng-model="asset.specimen" class="form-control"
+											id="biopsy">
+												<option><b>SlideType1</b></option>
+												<option><b>SlideType2</b></option>
+												<option><b>SlideType3</b></option>
+												<option><b>SlideType4</b></option>
+												<option><b>SlideType5</b></option>
+												<option><b>SlideType6</b></option>
+										</select>
+							</td>
+							<td width="200"><input type="number"
+											style="width: 50%; height: 120%;" ng-model="asset.quantity"
+											min="1" class="form-control" id="quantity"> <input
+											type="submit" 
+											class="btn btn-success pull-right"
+											ng-click="assetForm.$valid && save(asset)"
+											onclick="$('#3').val(null),$('#1').val(null),$('#2').val(null)"
+											value="Save" /></td>
+                        </tr>
+                        <tr ng-repeat="asset in assetTable">
+										<td>{{asset.assetId.id.value}}</td>
+										<td>{{asset.specimen}}
+										<td width="150">
+											<button type="button"
+												ng-click="printAsset(asset.npNumber,$index)"
+												class="btn btn-sm btn-primary" title="Print">
+												<i class="glyphicon glyphicon-print"></i>
+											</button>
+											<button type="button" class="btn btn-sm btn-danger"
+													title="Delete" ng-click="delete(asset)">
+													<i class="glyphicon glyphicon-trash"></i>
+													<!--ng-click=";hideRow = true""-->
+											</button>
+										</td>
+										
+						</tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- asset List End -->
+        </div>
+    </div>
+    </form>
+
+    <div align="center">
+        <button type="button" class="btn btn-md btn-warning" id="addQueue" ng-click="addQueue()" >Add All to Queue</button>
+        <button type="button" class="btn btn-md btn-primary" ng-click="printQueue()">Print Queue({{queue.length}}) <i class="glyphicon glyphicon-print"></i></button>
+        <button type="button" class="btn btn-md btn-success" onClick="window.location.reload();" title="Clear page and Queue">
+            <!-- <i class="glyphicon glyphicon-save"></i>
+            Save form and -->Clear All
+            <i class="glyphicon glyphicon-refresh"></i>
+        </button>
+    </div>
+    </div>
+        <!--AFTER SELECTING THE NUMBER OF BLOCKS HERE YOU MUST MAKE A REST GET CALL TO SEND NUMBER OF TISSUES
+AND RECEIVE A NUMBER OF SUGGESTED BLOCK NP NUMBERS . ON PRESSING PRINT , REST CALL TO MAKE NEW BLOCKS-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-animate.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.9.0/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/sectioning.js"></script>
+    <script src="js/alasql.min.js"></script>
+    <script src="js/xlsx.core.min.js"></script>
+</body>
+</html>

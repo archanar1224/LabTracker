@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Web application for lab sample tracker software">
+<title>NeuroPathology Lab</title>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"><!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-animate.js"></script>
+  <script type="text/javascript" src="./scanner_detection/jquery.scannerdetection.js"></script>-->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.min.js"></script>
+  <script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.1/angular-cookies.js"></script>
+</head>
+
+
+<!-- ************BODY************ -->
+<body ng-app="nimhanslab">
+
+
+
+<!-- Fixed navbar-->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">NIMHANS</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li ><a href="Dashboard.html">Dashboard</a></li>
+        <li class="active"><a href="#">Home</a></li>
+        <!-- 
+        <li><a href="#about">Gross</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administrative <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-header">Admin & Dashboard</li>
+            <li><a href="#">Admin 1</a></li>
+            <li><a href="#">Admin 2</a></li>
+            <li class="divider"></li>
+            <li class="dropdown-header">Portfolio</li>
+            <li><a href="#">Portfolio 1</a></li>
+            <li><a href="#">Portfolio 2</a></li>  
+          </ul>
+        </li>
+        <li><a href="#">Contact</a></li> -->
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- JUMBOTRON AN BUTTON -->
+<div class="container" style="width:80%">
+  <div class="jumbotron text-center">
+    <h2> Neuropathology Lab</h2>
+    <p>Receive samples for NeuroPath Lab</p>
+    <a><button type="button" class="btn  btn-info" onclick="window.location.href='ReceivingStation.html'"title="Pending Tasks">Receiving Station</button></a>
+    <a><button type="button" class="btn  btn-success" onclick="window.location.href='GrossingStation.html'"\title="Pending Tasks">Grossing Station</button></a>
+	<a><button type="button" class="btn  btn-info" onclick="window.location.href='EmbeddingStation.html'"title="Pending Tasks">Embedding Station</button></a>
+    <a><button type="button" class="btn  btn-success" onclick="window.location.href='SectioningStation.html'"\title="Pending Tasks">Sectioning Station</button></a>
+	<a><button type="button" class="btn  btn-info" onclick="window.location.href='StainingStation.html'"title="Pending Tasks">Staining Station</button></a>
+    <a><button type="button" class="btn  btn-success" onclick="window.location.href='ReportingStation.html'"\title="Pending Tasks">Reporting Station</button></a>
+	
+
+
+
+
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<!-- Fixed footer -->
+<div class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+  <div class="container">
+    <div class="navbar-text pull-left">
+      <!-- <p>© 2016 IIITB</p> -->
+      <h7>Developed by IIITB</h7>
+    </div>
+    <div class="navbar-text pull-right">
+      <h7>Version : 1.0.7</h7>
+      <a href="#"><i class="fa fa-facebook-square fa-2x"></i></a>
+      <a href="#"><i class="fa fa-twitter fa-2x"></i></a>
+      <a href="#"><i class="fa fa-google-plus fa-2x"></i></a>
+    </div>
+  </div>
+</div>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.9.0/ui-bootstrap-tpls.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/alasql.min.js"></script>
+<script src="js/xlsx.core.min.js"></script>
+		<script src="js/main.js"></script>
+		<script src="js/globals.js"></script>
+		<script src="js/verify.js"></script>
+		<script src="js/embedding.js"></script>
+		<script src="js/grossing.js"></script>
+		<script src="js/query.js"></script>
+		<script src="js/reporting.js"></script>
+		<script src="js/sectioning.js"></script>
+		<script src="js/specialRequest.js"></script>
+		<script src="js/staining.js"></script>
+		<script src="js/tree.js"></script>
+		
+</body>
+
+</html>
